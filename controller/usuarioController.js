@@ -11,7 +11,7 @@ const getUsers = async (req,res) => {
 
 }
 
-const addUser = async(req,res) =>{
+const addUsers = async(req,res) =>{
     try {
         const {nombre, email} = req.body
         const usuario = await Usuario.create({nombre, email})
@@ -21,5 +21,36 @@ const addUser = async(req,res) =>{
     }
 }
 
-module.exports = { getUsers, addUser }
+const updateUsers = async(req,res) =>{
+    try{
+        const {id}= req.params;
+        const{nombre, email} = req.body;
+
+        const usuario = await Usuario.findBuPk(id)
+        if(!usuario){
+            return res.status(404).json({message:"Usuario no encontrado"})
+        }
+
+        if(nombre) usuario.nombre=nombre
+        if(email) usuario.email=email
+
+        await usuario.save
+        return res.estatus(200).json({message})
+    }
+    catch(error){
+        res.status(500).json({error:error.message})
+    }
+
+}
+
+/*const changeStatusUsuario (res,req)=>{
+    try{
+
+    }catch(error){
+        res.status(500).json({error:error.message})
+    } 
+
+}*/
+
+module.exports = { getUsers, addUsers, updateUsers  }
 
