@@ -12,7 +12,14 @@ const getUsers = async (req, res) => {
 const addUser = async(req, res) =>{
     try {
         const {nombre, email} = req.body;
-        const usuario = await Usuario.create({nombre, email});
+
+        const hashConstrasena = await bcryp.hash(password, 10)
+
+        const usuario = await Usuario.create({
+            nombre,
+            email,
+            password            
+        });
         res.status(201).json(usuario);
     } catch (error) {
         res.status(500).json({error: error.message})
